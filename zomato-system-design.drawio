@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="draw.io" version="21.0.0">
+  <diagram name="Zomato-Swiggy-Doordash" id="zomato-system-design">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- TITLE -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="title" value="Zomato / Swiggy / Doordash" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="527" y="20" width="600" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- FUNCTIONAL REQUIREMENTS BOX -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="func-req" value="&lt;b&gt;Functional Requirements:&lt;/b&gt;&lt;br&gt;1. CRUD a restaurant&lt;br&gt;2. CRUD a food item&lt;br&gt;3. Search a restaurant, food item&lt;br&gt;4. Order food&lt;br&gt;&lt;br&gt;&lt;b&gt;Non Functional Requirements:&lt;/b&gt;&lt;br&gt;1. Eventual consistent on search/read.&lt;br&gt;2. Low latency on search queries.&lt;br&gt;3. Scalable to support millions of users.&lt;br&gt;4. Ready heavy traffic on restaurant and food items" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="20" y="90" width="320" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- CALCULATIONS BOX -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="calc" value="&lt;b&gt;Calculations:&lt;/b&gt;&lt;br&gt;1. No of DAU = 1 million&lt;br&gt;2. Read queries QPS = 10^6 * 100 / 10^5 = 1000 QPS&lt;br&gt;4. No of restaurant = 100k&lt;br&gt;5. Write queries QPS = 10^5 * 50/10^5 = 50 QPS" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="350" y="90" width="420" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- APIs BOX -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="apis" value="&lt;b&gt;APIs:&lt;/b&gt;&lt;br&gt;&lt;br&gt;1. POST: /api/v1/restaurant -&gt; 200 OK&lt;br&gt;{&lt;br&gt;&amp;nbsp;&amp;nbsp;restaurantName,&lt;br&gt;&amp;nbsp;&amp;nbsp;ownerId,&lt;br&gt;&amp;nbsp;&amp;nbsp;address,&lt;br&gt;&amp;nbsp;&amp;nbsp;location&lt;br&gt;}&lt;br&gt;&lt;br&gt;2. GET: /api/v1/restaurant/&amp;lt;restaurantId&amp;gt; -&gt; Restaurant&lt;br&gt;3. DELETE: /api/v1/restaurant/&amp;lt;restaurantId&amp;gt; -&gt; 200 OK&lt;br&gt;&lt;br&gt;4. POST: /api/v1/foodItem -&gt; 200 OK&lt;br&gt;{&lt;br&gt;&amp;nbsp;&amp;nbsp;restaurantId,&lt;br&gt;&amp;nbsp;&amp;nbsp;foodItemName,&lt;br&gt;&amp;nbsp;&amp;nbsp;description,&lt;br&gt;&amp;nbsp;&amp;nbsp;photos: List,&lt;br&gt;&amp;nbsp;&amp;nbsp;price&lt;br&gt;}&lt;br&gt;&lt;br&gt;5. GET: /api/v1/foodItem/&amp;lt;foodItemId&amp;gt; -&gt; FoodItem&lt;br&gt;6. DELETE: /api/v1/foodItem/&amp;lt;foodItemId&amp;gt; -&gt; 200 OK&lt;br&gt;&lt;br&gt;7. GET: /api/v1/search?query=&amp;lt;queryString&amp;gt;&amp;amp;pageNumber=&amp;lt;pageNumber&amp;gt;&amp;amp;limit=&amp;lt;10&amp;gt; -&gt; SearchItems&lt;br&gt;&lt;br&gt;8. POST: /api/v1/food/order&lt;br&gt;{&lt;br&gt;&amp;nbsp;&amp;nbsp;userId,&lt;br&gt;&amp;nbsp;&amp;nbsp;restaurantId,&lt;br&gt;&amp;nbsp;&amp;nbsp;ItemsWithQuantity: List, [{I1, Q1}, {I2, Q2}, {I3, Q3}]&lt;br&gt;}" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="20" y="310" width="380" height="500" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- CLIENT -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="client" value="Client" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="500" y="490" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- API GATEWAY -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <mxCell id="api-gw" value="A&lt;br&gt;P&lt;br&gt;I&lt;br&gt;&lt;br&gt;G&lt;br&gt;W" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontStyle=1;fontFamily=Courier New;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="660" y="460" width="70" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- MICROSERVICES -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+
+        <!-- Order Service -->
+        <mxCell id="order-svc" value="Order service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="360" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Food Item Service -->
+        <mxCell id="food-item-svc" value="Food Item service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="490" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Restaurant Service -->
+        <mxCell id="restaurant-svc" value="Restaurant service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="620" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Search Service -->
+        <mxCell id="search-svc" value="Search service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="810" y="750" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- DATABASES & STORAGE -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+
+        <!-- PostgresDB for Orders -->
+        <mxCell id="orders-db" value="PostgresDB&lt;br&gt;(SQL)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="290" width="120" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Orders DB Schema -->
+        <mxCell id="orders-schema" value="orders:&lt;br&gt;- orderId (PK)&lt;br&gt;- transactionId (FK)&lt;br&gt;- totalPrice&lt;br&gt;- userId&lt;br&gt;- restaurantId&lt;br&gt;- status: {IN_PROGRESS, PAYMENT_PENDING,&lt;br&gt;&amp;nbsp;&amp;nbsp;DELIVERY_PENDING, DELIVERED}&lt;br&gt;&lt;br&gt;lineItems:&lt;br&gt;- lineItemId&lt;br&gt;- orderId&lt;br&gt;- itemId&lt;br&gt;- rate&lt;br&gt;- quantity" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="220" width="300" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- S3 Blob Storage -->
+        <mxCell id="s3-storage" value="S3&lt;br&gt;(blob storage)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="440" width="120" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- S3 Label -->
+        <mxCell id="s3-label" value="Food Item&lt;br&gt;images" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1195" y="470" width="100" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- PostgresDB for Food Items -->
+        <mxCell id="fooditem-db" value="PostgresDB&lt;br&gt;(SQL)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="570" width="120" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Food Items DB Schema -->
+        <mxCell id="fooditem-schema" value="foodItems:&lt;br&gt;- foodItemId (PK)&lt;br&gt;- name&lt;br&gt;- description&lt;br&gt;- ImageS3Urls: List&lt;br&gt;- price" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="570" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- PostgresDB for Restaurant -->
+        <mxCell id="restaurant-db" value="PostgresDB&lt;br&gt;(SQL)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="700" width="120" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Restaurant DB Schema -->
+        <mxCell id="restaurant-schema" value="Restaurant:&lt;br&gt;- restaurantId (PK)&lt;br&gt;- ownerId (FK)&lt;br&gt;- address&lt;br&gt;- location_latitude (I)&lt;br&gt;- location_longitude (I)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1200" y="700" width="200" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Kafka -->
+        <mxCell id="kafka" value="Kafka" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="720" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Elasticsearch -->
+        <mxCell id="elasticsearch" value="Elastic&lt;br&gt;search" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="840" width="120" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Inverted Indexes Label -->
+        <mxCell id="inverted-idx" value="Inverted indexes&lt;br&gt;- restaurantName -&gt; restaurantId&lt;br&gt;- foodItemName -&gt; foodItemId" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="940" width="280" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Worker -->
+        <mxCell id="worker" value="Worker" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontFamily=Courier New;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="840" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════ -->
+        <!-- EDGES / ARROWS -->
+        <!-- ═══════════════════════════════════════════════════════ -->
+
+        <!-- Client → API Gateway -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="client" target="api-gw" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- API Gateway → Order Service -->
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="api-gw" target="order-svc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- API Gateway → Food Item Service -->
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="api-gw" target="food-item-svc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- API Gateway → Restaurant Service -->
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="api-gw" target="restaurant-svc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- API Gateway → Search Service -->
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="api-gw" target="search-svc" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Order Service → PostgresDB (Orders) -->
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="order-svc" target="orders-db" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Food Item Service → S3 -->
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="food-item-svc" target="s3-storage" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Food Item Service → PostgresDB (Food Items) -->
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="food-item-svc" target="fooditem-db" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Restaurant Service → PostgresDB (Restaurant) -->
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="restaurant-svc" target="restaurant-db" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Restaurant Service → Kafka (dashed) -->
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=open;" edge="1" source="restaurant-svc" target="kafka" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Food Item Service → Kafka (dashed) -->
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;endArrow=open;" edge="1" source="food-item-svc" target="kafka" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Search Service → Elasticsearch -->
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="search-svc" target="elasticsearch" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Kafka → Worker -->
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="kafka" target="worker" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Worker → Elasticsearch -->
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" source="worker" target="elasticsearch" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
